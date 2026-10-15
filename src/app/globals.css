@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cut: 14px;
+  --header-h: 72px;
+  color-scheme: dark;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  @apply bg-ink text-cream font-sans antialiased;
+  background-image: radial-gradient(1200px 600px at 80% -10%, rgba(32, 36, 170, 0.22), transparent 60%),
+    linear-gradient(180deg, #070A29 0%, #03040D 60%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+:focus-visible { outline: 2px solid #FEEDDB; outline-offset: 3px; border-radius: 2px; }
+::selection { background: #2024AA; color: #FEEDDB; }
+
+@layer components {
+  /* The chamfered badge shape from the ZER06 logo, used as the brand's frame device. */
+  .cut { clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut)); }
+  .cut-sm { --cut: 8px; }
+  .cut-lg { --cut: 28px; }
+
+  .page { @apply mx-auto w-full max-w-page px-5 sm:px-8; }
+
+  .display { @apply font-display font-bold uppercase leading-[0.92] tracking-[0.01em]; }
+  .h1 { @apply display text-[clamp(2.75rem,8vw,6.5rem)]; }
+  .h2 { @apply display text-[clamp(2rem,4.6vw,3.5rem)]; }
+  .h3 { @apply font-display text-2xl font-semibold leading-tight; }
+  .lede { @apply text-lg leading-relaxed text-cream/80 max-w-[60ch]; }
+  .prose-z { @apply max-w-[68ch] leading-[1.75] text-cream/85; }
+  .prose-z p + p { @apply mt-4; }
+
+  .btn {
+    @apply cut cut-sm inline-flex min-h-[48px] items-center justify-center gap-2 px-6 font-display text-[1.05rem] font-semibold uppercase tracking-wide
+      transition-[background-color,color,transform] duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn-primary { @apply btn bg-brand text-cream hover:bg-brand-bright; }
+  .btn-cream { @apply btn bg-cream text-navy hover:bg-white; }
+  .btn-ghost { @apply btn bg-cream/[0.06] text-cream ring-1 ring-inset ring-cream/30 hover:bg-cream/[0.12]; }
+  .btn-wa { @apply btn bg-[#1FAF5A] text-white hover:bg-[#1c9d51]; }
+  .btn-danger { @apply btn bg-bad/15 text-bad ring-1 ring-inset ring-bad/40 hover:bg-bad/25; }
+  .btn-sm { @apply min-h-[38px] px-4 text-sm; }
+
+  .glass { @apply bg-navy-800/70 ring-1 ring-inset ring-cream/10 backdrop-blur-md; }
+  .panel { @apply bg-navy-800/60 ring-1 ring-inset ring-cream/10; }
+
+  .label { @apply mb-1.5 block text-sm font-medium text-cream/80; }
+  .input {
+    @apply block min-h-[46px] w-full rounded-[3px] border border-cream/15 bg-ink/60 px-3.5 text-cream placeholder:text-cream/35
+      transition-colors focus:border-cream/60 focus:outline-none focus-visible:outline-none aria-[invalid=true]:border-bad;
+  }
+  textarea.input { @apply py-3 leading-relaxed; }
+  select.input { @apply pr-8; }
+  .err { @apply mt-1.5 text-sm text-bad; }
+  .hint { @apply mt-1.5 text-sm text-cream/55; }
+
+  .chip { @apply inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 text-xs font-medium; }
+}
+
+/* Reveal: content is visible by default; JS adds .reveal-armed only when motion is allowed. */
+.reveal-armed { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); }
+.reveal-armed.is-in { opacity: 1; transform: none; }
+
+/* Hero load sequence: the single orchestrated motion moment. */
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.hero-line { animation: rise 0.9s cubic-bezier(.2,.7,.2,1) both; }
+.hero-rule { animation: wipe 1.1s cubic-bezier(.7,0,.2,1) 0.35s both; }
+
+.speed-lines { background: repeating-linear-gradient(100deg, transparent 0 22px, rgba(254,237,219,0.05) 22px 23px); }
